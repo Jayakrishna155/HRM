@@ -1,29 +1,23 @@
-<?php include('header.php'); ?>
-<?php
-	include_once('controller/connect.php');
+<?php include('userheader.php');?>
+<?php //print_r($_SESSION);exit;
+	include_once('../controller/connect.php');
+	
 	$dbs = new database();
 	$db=$dbs->connection();
-	$row = "";
-	$gendern ="";
-	$maritaln ="";
-	$cityn ="";
-	$staten ="";
-	$countryn ="";
-	$positionn = "";
-	$rolen ="";
-	$ProfileEmpId=$_SESSION['User']['EmployeeId'];
-	$view = mysqli_query($db,"select * from employee where EmployeeId='$ProfileEmpId'");
-	$row = mysqli_fetch_assoc($view);
-		
-	$genderid = $row['Gender'];
+
+	$genderid = $_SESSION['User']['Gender'];
 	$gid = mysqli_query($db,"select * from gender where GenderId='$genderid'");
 	$gendern = mysqli_fetch_assoc($gid);
 
-	$maritalid = $row['MaritalStatus'];
+	$maritalid = $_SESSION['User']['MaritalStatus'];
 	$mid = mysqli_query($db,"select * from maritalstatus where MaritalId='$maritalid'");
 	$maritaln = mysqli_fetch_assoc($mid);
 
-	$cityid = $row['CityId'];
+	$positionid = $_SESSION['User']['PositionId'];
+	$pid = mysqli_query($db,"select * from position where PositinId='$positionid'");
+	$positionn = mysqli_fetch_assoc($pid);
+
+	$cityid = $_SESSION['User']['CityId'];
 	$cid = mysqli_query($db,"select * from city where CityId='$cityid'");
 	$cityn = mysqli_fetch_assoc($cid);
 
@@ -34,151 +28,130 @@
 	$countryid = $staten['CountryId'];
 	$couid = mysqli_query($db,"select * from country where CountryId='$countryid'");
 	$countryn = mysqli_fetch_assoc($couid);
-
-	$positionid = $row['PositionId'];
-	$pid = mysqli_query($db,"select * from position where PositinId='$positionid'");
-	$positionn = mysqli_fetch_assoc($pid);
-
-	$roleid = $row['RoleId'];
-	$rid= mysqli_query($db,"select * from role where RoleId='$roleid'");
-	$rolen = mysqli_fetch_assoc($rid);
-	
-	if(isset($_POST['close']))
-	{
-		echo "<script>window.location='home.php';</script>";
-	}
 ?>
-<link rel="stylesheet" type="text/css" href="css/table-style.css" />
-<script type="text/javascript" src="js/jquery.basictable.min.js"></script>
-<script type="text/javascript">
-    $(document).ready(function() {
-      $('#table').basictable();
+               	<div class="s-12 l-10">
+               	<h1>Profile</h1><hr>
+               	<div class="clearfix"></div>
+               	</div>
+               	<form action="" method="post">
 
-      $('#table-breakpoint').basictable({
-        breakpoint: 768
-      });
+               	<div class="s-12 l-2">
+                 	<table>
+                 		<tbody>
+                 			<tr>
+                 				<td align="center"><img src="../image/<?php echo (isset($_SESSION['User']['ImageName']))?$_SESSION['User']['ImageName']:""; ?>" id="myImg" style="height: 144px; border: 2px groove; border-radius:8px;"></td>
+                 			</tr>
+                 			<tr>
+                 				<td align="center"><u style="margin-bottom: 5px;"><b><?php echo ucfirst($_SESSION['User']['FirstName'])."&nbsp;".ucfirst($_SESSION['User']['LastName']); ?></b></u></td>
+                 			</tr>
+                 			<tr>
+                 				<td align="center"><b>Employee ID :-</b> <?php echo(isset($_SESSION['User']['EmployeeId']))?$_SESSION['User']['EmployeeId']:"Null";?></td>
+                 			</tr>
+                 		</tbody>
+                 	</table>
+               	</div>
+               	<div class="s-12 l-4" >
+                 	<table>
+                 		<tbody>
+                 			<tr>
+                 				<td style="text-align: right;"><b>Gender :</b></td>
+                 				<td ><?php echo(isset($gendern['Name']))?ucfirst($gendern['Name']):"Null";?></td>
+                 			</tr>
+                 			<tr>
+                 				<td style="text-align: right;"><b>Birth Date :</b></td>
+                 				<td ><?php echo(isset($_SESSION['User']['Birthdate']))?$_SESSION['User']['Birthdate']:"Null";?></td>
+                 			</tr>
+                 			<tr>
+                 				<td style="text-align: right;"><b>Email :</b></td>
+                 				<td ><?php echo(isset($_SESSION['User']['Email']))?$_SESSION['User']['Email']:"Null";?></td>
+                 			</tr>
+                 			<tr>
+                 				<td style="text-align: right;"><b>Mobile No :</b></td>
+                 				<td ><?php echo(isset($_SESSION['User']['Mobile']))?$_SESSION['User']['Mobile']:"Null";?></td>
+                 			</tr>
+                 			
+                 			<tr>
+                 				<td style="text-align: right;"><b>Address :</b></td>
+                 				<td ><?php echo(isset($_SESSION['User']['Address1']))?$_SESSION['User']['Address1']:"Null";?> ,</td>
+                 			</tr>
+                 			<tr>
+                 				<td></td>
+                 				<td ><?php echo(isset($_SESSION['User']['Address2']))?$_SESSION['User']['Address2']:"Null";?> , <?php echo(isset($_SESSION['User']['Address3']))?$_SESSION['User']['Address3']:"Null";?> , </td>
+                 			</tr>
+                 			<tr>
+                 				<td></td>
+                 				<td ><?php echo(isset($cityn['Name']))?ucfirst($cityn['Name']):"Null";?>, <?php echo(isset($staten['Name']))?ucfirst($staten['Name']):"Null";?>, <?php echo(isset($countryn['Name']))?ucfirst($countryn['Name']):"Null";?></td>
+                 			</tr>
+                 		</tbody>
+                 	</table>
+               	</div>
+               	<div class="s-12 l-3">
+                 	<table>
+                 		<tbody>
+                 			<tr>
+                 				<td style="text-align: right;"><b>Marital :</b></td>
+                 				<td><?php echo(isset($maritaln['Name']))?ucfirst($maritaln['Name']):"Null";?></td>
+                 			</tr>
+                 			<tr>
+                 				<td style="text-align: right;"><b>Aadhar No :</b></td>
+                 				<td><?php echo(isset($_SESSION['User']['AadharNumber']))?$_SESSION['User']['AadharNumber']:"Null";?></td>
+                 			</tr>
+                 			<tr>
+                 				<td style="text-align: right;"><b>Join Date :</b></td>
+                 				<td><?php echo(isset($_SESSION['User']['JoinDate']))?$_SESSION['User']['JoinDate']:"Null";?></td>
+                 			</tr>
+                 			<tr>
+                 				<td style="text-align: right;"><b>MAC Address :</b></td>
+                 				<td><?php echo (isset($_SESSION['User']['MacAddress']))?$_SESSION['User']['MacAddress']:"";?></td>
+                 			</tr>
+                 			<tr>
+                 				<td style="text-align: right;"><b>Role :</b></td>
+                 				<td><?php echo(isset($_SESSION['role']['Name']))?ucfirst($_SESSION['role']['Name']):"Null";?></td>
+                 			</tr>
+                 			<tr>
+                 				<td style="text-align: right;"><b>Position :</b></td>
+                 				<td><?php echo(isset($positionn['Name']))?ucfirst($positionn['Name']):"Null";?></td>
+                 			</tr>
+                 			
+                 		</tbody>
+                 	</table>
+               	</div>
+               	</form>
 
-      $('#table-swap-axis').basictable({
-        swapAxis: true
-      });
-
-      $('#table-force-off').basictable({
-        forceResponsive: false
-      });
-
-      $('#table-no-resize').basictable({
-        noResize: true
-      });
-
-      $('#table-two-axis').basictable();
-
-      $('#table-max-height').basictable({
-        tableWrapper: true
-      });
-    });
-</script>
-<ol class="breadcrumb" style="margin: 10px 0px ! important;">
-    <li class="breadcrumb-item"><a href="Home.php">Home</a><i class="fa fa-angle-right"></i>Profile</li>
-</ol>
-<form method="post">
-<div class="validation-form" style="margin-top: 0;">
-	<h2 style="text-transform: capitalize; margin: 0px;"><?php if($row) { echo $row['FirstName']."&nbsp;".$row['MiddleName']."&nbsp".$row['LastName'];} else { echo "Null"; } ?> -&nbsp;&nbsp;<font color="black"><?php if($row>0) { echo "Employee ID ::&nbsp;".$row['EmployeeId']; } else { echo "<b>Employee ID</b> ::&nbsp; Null"; }?></font></h2>
-	<div class="row">
-		<div class="col-md-5">
-			<table>
-				<tbody>
-					<tr>
-						<td rowspan="2" style="text-align: right;"><b>Photo</b>&nbsp; ::</td>
-						<td rowspan="2"><img src="image/<?php if($row) { echo $row['ImageName']; } else{ echo "Null"; }?>" style=" height: 61px; border: double;"></td>
-					</tr>
-				</tbody>
-				<tbody>
-					<tr>
-						<td style="text-align: right;"><b>Address</b> &nbsp;::</td>
-						<td><?php if($row) { echo $row['Address1']; } else{ echo "Null"; }?>,</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td><?php if($row) { echo $row['Address2']; } else{ echo "Null"; }?>,&nbsp;&nbsp;<?php if($row) { echo $row['Address3']; } else{ echo "Null"; }?></td>
-						
-					</tr>
-					<tr>
-						<td></td>
-						<td><?php if($cityn) { echo ucfirst($cityn['Name']); } else{ echo "Null"; }?> ,&nbsp;&nbsp;&nbsp;<?php if($staten) { echo ucfirst($staten['Name']); } else{ echo "Null"; }?> ,&nbsp;&nbsp;&nbsp;<?php if($countryn) { echo ucfirst($countryn['Name']); } else{ echo "Null"; }?></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		<div class="col-md-4">
-			<table>
-				<tbody>
-					<tr>
-						<td style="text-align: right;"><b>Gender</b> ::</td>
-						<td><?php if($gendern) { echo ucfirst($gendern['Name']); } else{ echo "Null"; }?></td>
-					</tr>
-				</tbody>
-				<tbody>
-					<tr>
-						<td style="text-align: right;"><b>Marital</b> ::</td>
-						<td><?php if($maritaln) { echo $maritaln['Name']; } else{ echo "Null"; }?></td>
-					</tr>
-				</tbody>
-				<tbody>
-					<tr>
-						<td style="text-align: right;"><b>Birth Date</b> ::</td>
-						<td><?php if($row) { echo $row['Birthdate']; } else{ echo "Null"; }?></td>
-					</tr>
-				</tbody>
-				<tbody>
-					<tr>
-						<td style="text-align: right;"><b>Email</b> ::</td>
-						<td><?php if($row) { echo $row['Email']; } else{ echo "Null"; }?></td>
-					</tr>
-				</tbody>
-				<tbody>
-					<tr>
-						<td style="text-align: right;"><b>Mobile</b> ::</td>
-						<td><?php if($row) { echo $row['Mobile']; } else{ echo "Null"; }?></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-		
-		<div class="col-md-3">
-			<table>
-				<tbody>
-					<tr>
-						<td style="text-align: right;"><b>Role</b> ::</td>
-						<td><?php if($rolen) { echo ucfirst($rolen['Name']); } else{ echo "Null"; }?></td>
-					</tr>
-				</tbody>
-				<tbody>
-					<tr>
-						<td style="text-align: right;"><b>Position</b> ::</td>
-						<td><?php if($positionn) { echo $positionn['Name']; } else{ echo "Null"; }?></td>
-					</tr>
-				</tbody>
-				<tbody>
-					<tr>
-						<td style="text-align: right;"><b>Join Date</b> ::</td>
-						<td><?php if($row) { echo $row['JoinDate']; } else{ echo "Null"; }?></td>
-					</tr>
-				</tbody>
-				<tbody>
-					<tr>
-						<td style="text-align: right;"><b>MAC Address</b> ::</td>
-						<td><?php if($row) { echo $row['MacAddress']; } else{ echo "Null"; }?></td>
-					</tr>
-				</tbody>
-			</table>
-		</div>
-	</div>
-	<div class="clearfix"></div>
-	<div class="row" style="text-align: center; margin-top: 2%;">
-		<div class="col-md-12 form-group">
-            <button type="submit" name="close" class="btn btn-primary">Close</button>
-        </div>
-	</div>
+<div id="myModal" class="modal">
+<span class="close">&times;</span>
+<img class="modal-content" id="img01">
+<div id="caption"></div>
 </div>
-</form>
-<?php include('footer.php'); ?>
+
+
+
+<?php include('userfooter.php');?>
+
+<!-- The Modal -->
+
+
+<!--image Popup-->
+<script>
+// Get the modal
+var modal = document.getElementById('myModal');
+
+// Get the image and insert it inside the modal - use its "alt" text as a caption
+var img = document.getElementById('myImg');
+var modalImg = document.getElementById("img01");
+var captionText = document.getElementById("caption");
+img.onclick = function(){
+    modal.style.display = "block";
+    modalImg.src = this.src;
+    captionText.innerHTML = this.alt;
+}
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() { 
+    modal.style.display = "none";
+}
+</script>
+<!--End image Popup -->
